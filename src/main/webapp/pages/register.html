@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>注册</title>
+        <link rel="stylesheet" type="text/css" href="../css/common.css">
+        <link rel="stylesheet" href="../css/register.css">
+		<!--导入jquery-->
+		<script src="../js/jquery-3.3.1.js"></script>
+
+		<script>
+			// 对表单进行验证
+			// 1.用户名要求6-18位字符
+			// 2.密码要求6-18字符含特殊字符
+			// 3.email正确email格式
+			// 4.姓名非空
+			// 5.手机号11位数值
+			// 6.性别非空
+			// 7.日期非空
+			// 8.非空
+			function checkUserName(){
+				var username = $("#username").val();
+				var reg_username = /^\w{8,20}$/i;
+				var flag = reg_username.test(username);
+				if(flag){
+					$("#username").css("border-color","green");
+				}else{
+					$("#username").css("border-color","red");
+				}
+				return flag;
+			}
+			function checkPssword(){
+				var password = $("#password").val();
+				var reg_password = new RegExp('^\\w{8,20}$');
+				var flag = reg_password.test(password);
+				if(flag){
+					$("#password").css("border-color","green");
+				}else{
+					$("#password").css("border-color","red");
+				}
+				return flag;
+			}
+			function checkEmial(){
+				var email = $("#email").val();
+				var reg_email = /^\w+@\w+\.+\w+$/;
+				var flag = reg_email.test(email);
+				if(flag){
+					if(flag){
+						$("#email").css("border-color","green");
+					}else{
+						$("#email").css("border-color","red");
+					}
+					return flag;
+				}
+			}
+			function checkName(){
+				var name = $("#name").val();
+				var flag;
+				if(!name){
+					flag = false;
+					$("#name").css("border-color","red");
+				}else {
+					flag = true;
+					$("#name").css("border-color","green");
+				}
+				return flag;
+			}
+			function checkPhone(){
+				var phone = $("#telephone").val();
+				var reg_phone = /^1[3|4|5|7|8|9]\d{9}$/;
+				var flag = reg_phone.test(phone);
+				if(flag){
+					if(flag){
+						$("#telephone").css("border-color","green");
+					}else{
+						$("#telephone").css("border-color","red");
+					}
+					return flag;
+				}
+			}
+			function checkBirthday(){
+				var birthday = $("#birthday").val();
+				var flag;
+				if(!birthday){
+					flag = false;
+					$("#birthday").css("border-color","red");
+				}else {
+					flag = true;
+					$("#birthday").css("border-color","green");
+
+				}
+				return flag;
+			}
+
+			function getJsonFromForm(){
+				var serializeObj={};
+				var array=$("#registerForm").serializeArray();
+				// var str=this.serialize();
+				$(array).each(function(){
+					if(serializeObj[this.name]){
+						if($.isArray(serializeObj[this.name])){
+							serializeObj[this.name].push(this.value);
+						}else{
+							serializeObj[this.name]=[serializeObj[this.name],this.value];
+						}
+					}else{
+						serializeObj[this.name]=this.value;
+					}
+				});
+				return serializeObj;
+			}
+
+			$(function () {
+				$("#username").blur(checkUserName);
+				$("#password").blur(checkPssword);
+				$("#email").blur(checkEmial);
+				$("#name").blur(checkName);
+				$("#telephone").blur(checkPhone);
+				$("#birthday").blur(checkBirthday);
+				$("#registerForm").submit(function (){
+					if(checkUserName()&& checkPssword() && checkEmial() && checkName() && checkPhone() && checkBirthday()){
+						// alert(checkUserName());
+						// alert(getJsonFromForm());
+							$.ajax({
+								url:"/user/register",
+								type:"POST",
+								data:JSON.stringify(getJsonFromForm()),
+								dataType:"json",
+								contentType:"application/json;charset=UTF-8",
+								success:function (data) {
+									if(data.flag){
+										window.location.href="/pages/register_ok.html";
+									}else{
+										window.alert(data.message);
+									}
+								}
+
+							});
+						}
+						return false;
+				});
+
+
+			})
+			// if(checkUserName()&& checkPssword() && checkEmial() && checkName() && checkPhone() && checkBirthday() ){
+			// 	var obj = getJsonFromForm();
+			// 	alert(obj);
+			// 	$.ajax({
+			// 		url:"/user/register",
+			// 		type:"POST",
+			// 		data:JSON.stringify(obj),
+			// 		dataType:"json",
+			// 		contentType:"application/json;charset=UTF-8",
+			// 		success:function (data) {
+			// 			if(data.flag){
+			//
+			// 			}
+			// 		}
+			//
+			// 	});
+			// }
+			// return false;
+
+		</script>
+    </head>
+	<body>
+	<!--引入头部-->
+	<div id="header"></div>
+        <!-- 头部 end -->
+    	<div class="rg_layout">
+    		<div class="rg_form clearfix">
+    			<div class="rg_form_left">
+    				<p>新用户注册</p>
+    				<p>USER REGISTER</p>
+    			</div>
+    			<div class="rg_form_center">
+					
+					<!--注册表单-->
+    				<form id="registerForm" >
+						<!--提交处理请求的标识符-->
+						<!--<input type="hidden" name="action" value="register">-->
+    					<table style="margin-top: 25px;">
+    						<tr>
+    							<td class="td_left">
+    								<label for="username">用户名</label>
+    							</td>
+    							<td class="td_right">
+									<input type="text" id="username" name="username" placeholder="请输入账号 6-18位的字符">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="password">密码</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="password" name="password" placeholder="请输入密码">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="email">Email</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="email" name="email" placeholder="请输入Email">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="name">姓名</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="name" name="name" placeholder="请输入真实姓名">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="telephone">手机号</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="telephone" name="telephone" placeholder="请输入您的手机号">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="sex">性别</label>
+    							</td>
+    							<td class="td_right gender">
+    								<input type="radio" id="sex" name="sex" value="男" checked> 男
+    								<input type="radio" name="sex" value="女"> 女
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="birthday">出生日期</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="date" id="birthday" name="birthday" placeholder="年/月/日">
+    							</td>
+    						</tr>
+    						<!--<tr>-->
+    							<!--<td class="td_left">-->
+    								<!--<label for="check">验证码</label>-->
+    							<!--</td>-->
+    							<!--<td class="td_right check">-->
+    								<!--<input type="text" id="check" name="check" class="check">-->
+    								<!--<img src="checkCode" height="32px" alt="" onclick="changeCheckCode(this)">-->
+									<!--<script type="text/javascript">-->
+										<!--//图片点击事件-->
+										<!--function changeCheckCode(img) {-->
+											<!--img.src="checkCode?"+new Date().getTime();-->
+                                        <!--}-->
+									<!--</script>-->
+    							<!--</td>-->
+    						<!--</tr>-->
+    						<tr>
+    							<td class="td_left"> 
+    							</td>
+    							<td class="td_right check"> 
+    								<input id="send" type="submit" class="submit" value="注册">
+									<span id="msg" style="color: red;"></span>
+    							</td>
+    						</tr>
+    					</table>
+    				</form>
+    			</div>
+    			<div class="rg_form_right">
+    				<p>
+    					已有账号？
+    					<a href="#">立即登录</a>
+    				</p>
+    			</div>
+    		</div>
+    	</div>
+        <!--引入尾部-->
+    	<div id="footer"></div>
+		<!--导入布局js，共享header和footer-->
+		<script type="text/javascript" src="../js/include.js"></script>
+    	
+    </body>
+</html>

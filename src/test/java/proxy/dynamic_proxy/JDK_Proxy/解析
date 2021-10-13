@@ -1,0 +1,10 @@
+java的动态代理分为两种
+1.JDK
+2.CGLIB
+    JDK方式
+        定义接口
+        定义被代理对象并实现接口
+        定义代理对象实现InvocationHandler接口，实现invoke方法，并将被代理对象注入
+     CGLIB
+        定义被代理对象
+        定义代理对象并实现接口MethodInterceptor中Interceptor方法

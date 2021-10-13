@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuit.mappers.RouteMapper">
+    <select id="getTotall" resultType="int">
+        select count(*) from tab_route where 1=1
+          <if test="cid !=0">
+              and cid = #{cid}
+          </if>
+          <if test="rname !=null">
+              and rname like CONCAT('%',#{rname},'%')
+          </if>
+    </select>
+
+    <select id="findRouteByCid" resultType="com.cuit.pojo.Route" >
+        select * from tab_route where 1=1
+        <if test="cid !=0 ">
+            and cid = #{cid}
+        </if>
+        <if test="rname !=null ">
+            and rname like CONCAT('%',#{rname},'%')
+        </if>
+         limit #{start},#{pagetotals}
+    </select>
+
+    <select id="findRouteByRid" resultType="com.cuit.pojo.Route">
+        select * from tab_route where rid = #{rid}
+    </select>
+
+    <update id="updateCount" parameterType="int">
+        update tab_route set count = count + 1 where rid = #{rid}
+    </update>
+</mapper>

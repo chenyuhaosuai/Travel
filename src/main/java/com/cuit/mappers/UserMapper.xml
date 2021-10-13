@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuit.mappers.UserMapper">
+    <select id="findAll" resultType="com.cuit.pojo.User">
+        select * from tab_user
+    </select>
+
+    <select id="findUserByNameAndPassword" parameterType="String" resultType="com.cuit.pojo.User">
+        select * from tab_user where username = #{username} and password = #{password}
+    </select>
+
+
+    <insert id="save" parameterType="com.cuit.pojo.User" >
+        insert into tab_user(username,password,name,birthday,sex,telephone,email) values(#{username},#{password},#{name},#{birthday},#{sex},#{telephone},#{email})
+    </insert>
+
+</mapper>

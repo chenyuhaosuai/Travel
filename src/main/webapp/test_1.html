@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            $("#send1").click(function () {
+                $.ajax({
+                    url:"/user/test",
+                    type:"POST",
+                    data:JSON.stringify({"name":"cy","age":18}),
+                    dataType:"json",
+                    contentType:"application/json;charset=UTF-8",
+                    success:function (data) {
+                       alert("yes")
+                    },
+                    error:function () {
+                        alert("false")
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+    <input id="send1" type="button" value="submit">
+    <!--<input id="send" type="button" value="submit" disabled>-->
+</body>
+</html>
